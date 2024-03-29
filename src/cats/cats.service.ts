@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { Cat } from './cat.entity';
 
@@ -10,7 +10,19 @@ export class CatsService {
   ) {}
 
   async findAll(): Promise<Cat[]> {
-    return this.catsRepository.findAll<Cat>();
+    return await this.catsRepository.findAll<Cat>();
   }
+
+  async findOne(id: number): Promise<Cat> {
+    return await this.catsRepository.findOne<Cat>({where: {id}})
+  }
+
+  // async create (payload: CreateCatDto) {
+  //   try {
+  //     return await this.catsRepository.create(payload)
+  //   } catch (error) {
+  //     throw new BadRequestException()
+  //   }
+  // }
 }
 

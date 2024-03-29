@@ -1,22 +1,34 @@
 import { Sequelize } from 'sequelize-typescript';
-import dotenv from 'dotenv'
-import { Cat } from "../cats/cat.entity"
+require('dotenv').config()
+import { User } from 'src/users/entities/user.entity';
 
-// dotenv.config()
+
+const database = process.env.SQ_DATABASE;
+const user = process.env.SQ_USERNAME;
+const password = process.env.SQ_PASSWORD;
+const host = process.env.SQ_HOST;
+
+if (!database || !user || !password) {
+  throw new Error(
+    "Missing required environment variables for database connection"
+  );
+}
 
 export const databaseProviders = [
   {
     provide: 'SEQUELIZE',
     useFactory: async () => {
-      const sequelize = new Sequelize({
-        dialect: 'postgres',
-        host: 'localhost',
-        port: 3306,
-        username: 'root',
-        password: 'password',
-        database: 'nest',
-      });
-      sequelize.addModels([Cat]);
+      const sequelize = new Sequelize(database, user, password, {
+        host: host,
+        dialect: "postgres",
+        dialectOptions: {
+          ssl: {
+            require: true,
+            rejectUnauthorized: false
+          }
+        }
+      })
+      sequelize.addModels([User]);
       await sequelize.sync();
       return sequelize;
     },
