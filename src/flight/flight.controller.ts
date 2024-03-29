@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, ValidationPipe } from '@nestjs/common';
 import { CreateFlightDto } from './dto/create-flight.dto';
 import { UpdateFlightDto } from './dto/update-flight.dto';
 import { FlightService } from './flight.service';
@@ -9,26 +9,26 @@ export class FlightController {
 
   // GET /flights?service=direct
   @Get()
-  getFlights(@Query('service') service: string) {
-    return this.flightService.getFlights(service)
+  getFlights(@Query('classType') classType: 'business' | 'economy' | 'vvip') {
+    return this.flightService.getFlights(classType)
   }
 
   // GET /flights/:id
   @Get(':id')
-  getOneFlight(@Param('id') id: string) {
-    return this.flightService.getFlight(+id)
+  getOneFlight(@Param('id', ParseIntPipe) id: number) {
+    return this.flightService.getFlight(id)
   }
 
   // POST /flight/:id
   @Post()
-  createFlight(@Body() createFlightDto: CreateFlightDto) {
+  createFlight(@Body(new ValidationPipe()) createFlightDto: CreateFlightDto) { 
     return this.flightService.createFlight(createFlightDto)
   }
 
   // PUT /flight/:id
   @Put(':id')
-  updateFlight(@Param('id') id: string, @Body() updateFlightDto: UpdateFlightDto) {
-    return this.flightService.updateFlight(+id, updateFlightDto)
+  updateFlight(@Param('id', ParseIntPipe) id: number, @Body() updateFlightDto: UpdateFlightDto) {
+    return this.flightService.updateFlight(id, updateFlightDto)
   }
 
   // DELETE /flight/:id

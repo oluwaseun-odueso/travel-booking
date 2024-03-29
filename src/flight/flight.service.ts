@@ -5,12 +5,12 @@ import { UpdateFlightDto } from './dto/update-flight.dto';
 @Injectable()
 export class FlightService {
   private flights = [
-    {id: 0, name: "Tola", class: "Economy", flight: "Air Peace"},
-    {id: 1, name: "Bola", class: "Business", flight: "Arik Air"},
-    {id: 2, name: "Sola", class: "VVIP", flight: "Dana Airline"}
+    {id: 0, name: "Tola", class: "economy", flight: "Air Peace"},
+    {id: 1, name: "Bola", class: "business", flight: "Arik Air"},
+    {id: 2, name: "Sola", class: "vvip", flight: "Dana Airline"}
   ]
 
-  getFlights (service?: string) {
+  getFlights (service?: 'business' | 'economy' | 'vvip') {
     if (service) {
       return this.flights.filter((flight) => flight.class === service)
     }
