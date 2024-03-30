@@ -13,4 +13,6 @@ export class CreateUserDto {
 
   @IsEmpty({message: "Nationality should not be empty"})
   nationality: string
+
+  password: string
 }
